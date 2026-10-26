@@ -455,7 +455,6 @@
         '<h1 class="page-title">关于</h1>' +
         '<p class="page-sub">此网站收录本人所遇奇异搞笑事件。</p>' +
         '<div class="prose">' +
-          "<p>我把遇到的那些事一条条记在这里，免得过几年，连自己都不信真的发生过。</p>" +
           "<p>如果有奇异搞笑事件补充，欢迎投稿至：</p>" +
           '<p class="mail-row"><a class="btn" href="mailto:' + escapeHtml(mail) + '">' + escapeHtml(mail) + "</a></p>" +
           "<p>邮件里写清楚时间、地点、发生了什么就行，不用讲究文笔，能看懂就成。</p>" +
