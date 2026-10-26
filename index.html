@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>拾光小筑 · 记录与思考</title>
+  <meta name="description" content="一个关于阅读、写作与生活观察的个人博客。">
+  <meta name="author" content="你的名字">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8C%BF%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="alternate" type="application/rss+xml" title="拾光小筑" href="feed.xml">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("theme");
+        if (!t) {
+          t = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        }
+        document.documentElement.setAttribute("data-theme", t);
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+
+  <div class="progress" id="progress"></div>
+
+  <header class="site-header">
+    <div class="shell header-inner">
+      <a class="brand" href="#/" id="brand">拾光小筑</a>
+      <nav class="site-nav" aria-label="主导航">
+        <ul>
+          <li><a href="#/" data-nav="list">文章</a></li>
+          <li><a href="#/tags" data-nav="tags">标签</a></li>
+          <li><a href="#/about" data-nav="about">关于</a></li>
+        </ul>
+      </nav>
+      <button class="theme-toggle" type="button" aria-label="切换主题">☾</button>
+    </div>
+  </header>
+
+  <main class="shell" id="app">
+    <!-- 内容由 app.js 渲染 -->
+  </main>
+
+  <footer class="site-footer">
+    <div class="shell footer-inner">
+      <span>© <span data-year>2026</span> 拾光小筑</span>
+      <span><a href="feed.xml">RSS</a> · <a href="#/">回到首页</a> · 纯 HTML 手写</span>
+    </div>
+  </footer>
+
+  <button class="to-top" id="toTop" type="button" aria-label="回到顶部">↑</button>
+
+  <script src="assets/js/posts.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
