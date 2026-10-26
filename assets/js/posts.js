@@ -7,11 +7,11 @@
    ========================================================================== */
 
 window.BLOG_CONFIG = {
-  title: "拾光小筑",
-  tagline: "慢慢写，慢慢记。",
-  intro: "这里存放我读到的东西、想清楚的事，和一些还不成熟的念头。不追热点，只求写得诚实。",
-  author: "你的名字",
-  email: "you@example.com",
+  title: "L1MA0",
+  tagline: "L1MA0的个人网页",
+  intro: "如果我冒犯到了你，那我说的就是你，憋着",
+  author: "L1MA0",
+  email: "steamryy@outlook.com",
   siteUrl: "https://politeelm.github.io/Blog",
   perPage: 4,
   links: [

@@ -429,20 +429,18 @@
   }
 
   function renderAbout() {
+    var mail = cfg.email || "";
+
     app.innerHTML =
       '<section class="page">' +
         '<h1 class="page-title">关于</h1>' +
-        '<p class="page-sub">一个普通人，和他的树洞。</p>' +
+        '<p class="page-sub">此网站收录本人所遇奇异搞笑事件。</p>' +
         '<div class="prose">' +
-          "<p>你好，我是<strong>" + escapeHtml(cfg.author || "某人") + "</strong>。白天写代码、上班，晚上读点书，偶尔把想不明白的事情写下来。</p>" +
-          "<p>这个博客建于 2026 年。它的前身是散落在各个平台的碎片，后来觉得还是有个自己的地方比较好——排版由我定，内容由我定，什么时候不写了也由我定。</p>" +
-          "<h2>这里会出现什么</h2>" +
-          "<ul><li>读书笔记，主要是非虚构</li><li>一些手艺上的记录：写代码、做工具、折腾系统</li><li>偶尔的生活观察，但不会太私人</li></ul>" +
-          "<h2>不太会出现什么</h2>" +
-          "<ul><li>追热点的时评</li><li>没有验证过的结论</li><li>为了更新而更新的凑数文章</li></ul>" +
-          "<h2>联系我</h2>" +
-          "<p>邮箱：<code>" + escapeHtml(cfg.email || "") + "</code>。欢迎写信，尤其是纠错和推荐书——这两类我基本都会回。</p>" +
-          "<blockquote><p>写作不是把想清楚的东西记下来，而是靠写，把事情想清楚。</p></blockquote>" +
+          "<p>我把遇到的那些事一条条记在这里，免得过几年，连自己都不信真的发生过。</p>" +
+          "<p>如果有奇异搞笑事件补充，欢迎投稿至：</p>" +
+          '<p class="mail-row"><a class="btn" href="mailto:' + escapeHtml(mail) + '">' + escapeHtml(mail) + "</a></p>" +
+          "<p>邮件里写清楚时间、地点、发生了什么就行，不用讲究文笔，能看懂就成。</p>" +
+          "<blockquote><p>现实不用讲逻辑，讲逻辑的写不出这种东西。</p></blockquote>" +
         "</div>" +
       "</section>";
   }
@@ -481,7 +479,7 @@
       document.title = "关于 · " + (cfg.title || "博客");
     } else {
       renderList(route);
-      document.title = (cfg.title || "博客") + (cfg.tagline ? " · " + cfg.tagline : "");
+      document.title = cfg.tagline || cfg.title || "博客";
     }
 
     setNav(route.view);

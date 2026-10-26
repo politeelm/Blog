@@ -1,4 +1,4 @@
-# 拾光小筑 · 个人博客（单页交互版）
+# L1MA0 · 个人网页（单页交互版）
 
 一个**零依赖的单页博客**：纯 HTML + CSS + 原生 JS，没有 Node、没有构建、没有数据库。
 双击 `index.html` 就能用，推送到 GitHub Pages 就能上线。
@@ -59,11 +59,11 @@ D:\网站\
 
 ```js
 window.BLOG_CONFIG = {
-  title: "拾光小筑",        // 站点名（浏览器标签页、页脚）
+  title: "L1MA0",        // 站点名（浏览器标签页、页脚）
   tagline: "慢慢写，慢慢记。", // 首页大标题
   intro: "这里存放……",       // 首页那段介绍
-  author: "你的名字",         // 关于页
-  email: "you@example.com",   // 关于页
+  author: "L1MA0",            // 关于页
+  email: "steamryy@outlook.com",  // 关于页（投稿邮箱）
   siteUrl: "https://yourname.github.io/blog",
   perPage: 4,                 // ★ 每页显示几篇，改这个就改分页
   links: [...]                // 首页那排小按钮
@@ -147,8 +147,8 @@ git init
 git add -A
 git commit -m "first commit"
 
-git config user.name "你的名字"
-git config user.email "you@example.com"
+git config user.name "politeelm"
+git config user.email "politeelm@users.noreply.github.com"
 
 git branch -M main
 git remote add origin https://github.com/你的用户名/blog.git

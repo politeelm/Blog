@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>拾光小筑</title>
+    <title>L1MA0</title>
     <link>https://politeelm.github.io/Blog/</link>
-    <description>一个关于阅读、写作与生活观察的个人博客。</description>
+    <description>此网站收录本人所遇奇异搞笑事件。</description>
     <language>zh-CN</language>
     <lastBuildDate>Tue, 27 Oct 2026 10:00:00 +0800</lastBuildDate>
     <atom:link href="https://politeelm.github.io/Blog/feed.xml" rel="self" type="application/rss+xml"/>
