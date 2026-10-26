@@ -84,7 +84,7 @@ if ($NoPush) {
 
 $ok = $false
 for ($i = 1; $i -le 4; $i++) {
-  $out = git push 2>&1 | Out-String
+  $out = git push -u origin HEAD 2>&1 | Out-String
   if ($LASTEXITCODE -eq 0) {
     $ok = $true
     Write-Host "推送成功（第 $i 次尝试）" -ForegroundColor Green

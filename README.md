@@ -93,11 +93,14 @@ window.BLOG_CONFIG = {
 脚本会往 `posts.js` 顶部插入一条数据、往 `feed.xml` 插入一条，然后打印接下来该干什么。
 接着打开 `assets/js/posts.js`，把 `content` 里的占位内容换成正文即可（正文就是 HTML）。
 
-如果提示「禁止运行脚本」，改用：
+如果提示「无法加载文件…因为在此系统上禁止运行脚本」，执行一次这个（只影响当前用户）：
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\新建文章.ps1 -标题 "今天的晚饭"
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
 ```
+
+然后关掉 PowerShell 窗口重新开一个，脚本就能直接运行了。
+临时替代方案：`powershell -ExecutionPolicy Bypass -File .\新建文章.ps1`
 
 ### 方法 B：手动加
 
