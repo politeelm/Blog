@@ -69,19 +69,23 @@
   });
 
   var allTags = (function () {
-    var map = {};
+    var order = (cfg.tags || []).slice();
+    var counts = {};
+
+    order.forEach(function (tag) {
+      counts[tag] = 0;
+    });
+
     posts.forEach(function (post) {
       post.tags.forEach(function (tag) {
-        map[tag] = (map[tag] || 0) + 1;
+        if (order.indexOf(tag) === -1) order.push(tag);
+        counts[tag] = (counts[tag] || 0) + 1;
       });
     });
-    return Object.keys(map)
-      .map(function (tag) {
-        return { name: tag, count: map[tag] };
-      })
-      .sort(function (a, b) {
-        return b.count - a.count || a.name.localeCompare(b.name);
-      });
+
+    return order.map(function (tag) {
+      return { name: tag, count: counts[tag] || 0 };
+    });
   })();
 
   var state = { sort: "desc" };
@@ -261,17 +265,27 @@
     var metaBits = ["共 " + total + " 篇"];
     if (route.tag) metaBits.push('标签「' + escapeHtml(route.tag) + "」");
     if (routes_q(route)) metaBits.push("搜索「" + escapeHtml(route.q.trim()) + "」");
-    metaBits.push("第 " + page + " / " + pages + " 页");
+    if (total > 0) metaBits.push("第 " + page + " / " + pages + " 页");
 
     var html =
       '<p class="result-meta">' + metaBits.join(" · ") + "</p>";
 
     if (!total) {
-      html +=
-        '<div class="empty">' +
-        "<p>没有找到相关的文章。</p>" +
-        '<a class="btn" href="#/">看看全部文章</a>' +
-        "</div>";
+      if (posts.length === 0 && !route.tag && !routes_q(route)) {
+        html +=
+          '<div class="empty">' +
+          '<p class="empty-title">这里还什么都没有。</p>' +
+          '<p class="empty-hint">文章会一篇篇放上来，先看看这个站是干嘛的？</p>' +
+          '<a class="btn" href="#/about">关于本站</a>' +
+          "</div>";
+      } else {
+        html +=
+          '<div class="empty">' +
+          '<p class="empty-title">没有找到相关的文章。</p>' +
+          '<p class="empty-hint">换个标签，或者把搜索词删掉试试。</p>' +
+          '<a class="btn" href="#/">清除筛选</a>' +
+          "</div>";
+      }
       return html;
     }
 
@@ -292,10 +306,12 @@
       allTags
         .map(function (tag) {
           var active = tag.name === route.tag ? " is-active" : "";
+          var count = tag.count > 0 ? '<span class="chip-count">' + tag.count + "</span>" : "";
           return (
             '<a class="chip' + active + '" href="' + listHash({ tag: tag.name }) + '">' +
             escapeHtml(tag.name) +
-            '<span class="chip-count">' + tag.count + "</span></a>"
+            count +
+            "</a>"
           );
         })
         .join("")
@@ -420,7 +436,10 @@
               return (
                 '<a class="tag-pill" href="' + listHash({ tag: tag.name }) + '">' +
                 escapeHtml(tag.name) +
-                '<span class="tag-pill-count">' + tag.count + "</span></a>"
+                (tag.count > 0
+                  ? '<span class="tag-pill-count">' + tag.count + "</span>"
+                  : "") +
+                "</a>"
               );
             })
             .join("") +

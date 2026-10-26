@@ -66,6 +66,7 @@ window.BLOG_CONFIG = {
   email: "steamryy@outlook.com",  // 关于页（投稿邮箱）
   siteUrl: "https://yourname.github.io/blog",
   perPage: 4,                 // ★ 每页显示几篇，改这个就改分页
+  tags: ["奇异人士", ...],     // ★ 标签清单：写了就会出现在筛选栏，没文章也显示
   links: [...]                // 首页那排小按钮
 };
 ```

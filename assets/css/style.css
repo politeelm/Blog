@@ -511,6 +511,17 @@ html[data-theme="dark"] .pg.is-current {
   margin: 0 0 1.2rem;
 }
 
+.empty-title {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  color: var(--text);
+}
+
+.empty-hint {
+  font-size: 0.9rem;
+  margin-top: -0.6rem !important;
+}
+
 .btn {
   display: inline-block;
   padding: 0.55rem 1.2rem;

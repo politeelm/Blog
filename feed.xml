@@ -5,44 +5,9 @@
     <link>https://politeelm.github.io/Blog/</link>
     <description>此网站收录本人所遇奇异搞笑事件。</description>
     <language>zh-CN</language>
-    <lastBuildDate>Tue, 27 Oct 2026 10:00:00 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 27 Oct 2026 02:49:41 +08:00</lastBuildDate>
     <atom:link href="https://politeelm.github.io/Blog/feed.xml" rel="self" type="application/rss+xml"/>
     <!-- ITEMS:START -->
-    <item>
-      <title>你好，世界</title>
-      <link>https://politeelm.github.io/Blog/#/post/hello-world</link>
-      <guid isPermaLink="false">https://politeelm.github.io/Blog/#/post/hello-world</guid>
-      <pubDate>Tue, 27 Oct 2026 10:00:00 +0800</pubDate>
-      <description>信息早就过剩了，为什么还要再开一个博客？大概因为，只有写下来，才算真的想清楚。</description>
-    </item>
-    <item>
-      <title>为什么我选了静态博客</title>
-      <link>https://politeelm.github.io/Blog/#/post/why-static</link>
-      <guid isPermaLink="false">https://politeelm.github.io/Blog/#/post/why-static</guid>
-      <pubDate>Mon, 20 Oct 2026 21:30:00 +0800</pubDate>
-      <description>没有数据库、没有后台、没有插件更新。三个文件就能跑起来的站点，反而最容易坚持写下去。</description>
-    </item>
-    <item>
-      <title>读书笔记：把读到的东西留在自己身上</title>
-      <link>https://politeelm.github.io/Blog/#/post/reading-notes</link>
-      <guid isPermaLink="false">https://politeelm.github.io/Blog/#/post/reading-notes</guid>
-      <pubDate>Sun, 12 Oct 2026 09:15:00 +0800</pubDate>
-      <description>划线不等于记住，摘抄也不等于理解。聊聊我用了两年的一套笔记方法。</description>
-    </item>
-    <item>
-      <title>我每天在用的五个小工具</title>
-      <link>https://politeelm.github.io/Blog/#/post/daily-tools</link>
-      <guid isPermaLink="false">https://politeelm.github.io/Blog/#/post/daily-tools</guid>
-      <pubDate>Sun, 28 Sep 2026 20:40:00 +0800</pubDate>
-      <description>不是那种「效率神器推荐合集」，就是我用了一年以上、到现在还没卸载的东西。</description>
-    </item>
-    <item>
-      <title>把时间花在看得见的地方</title>
-      <link>https://politeelm.github.io/Blog/#/post/visible-time</link>
-      <guid isPermaLink="false">https://politeelm.github.io/Blog/#/post/visible-time</guid>
-      <pubDate>Tue, 15 Sep 2026 22:05:00 +0800</pubDate>
-      <description>一年过去，我发现自己说不清时间去哪了。后来我给「看得见」重新下了个定义。</description>
-    </item>
     <!-- ITEMS:END -->
   </channel>
 </rss>
