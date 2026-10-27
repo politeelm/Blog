@@ -49,6 +49,104 @@
     return { chars: chars, minutes: Math.max(1, Math.round(chars / 400)) };
   }
 
+  /* ------------------------------ 浏览量 ------------------------------
+     静态站没有后端，用 abacus.jasoncameron.dev 这个免费计数接口（支持 CORS）：
+       /hit/<命名空间>/<key>   计数 +1 并返回新值
+       /get/<命名空间>/<key>   只读，不 +1
+     同一个浏览器会话里每篇文章只计一次，避免来回点导航就刷数字。
+     接口挂了 / 离线 / 被墙，就自动隐藏，不影响页面。
+     ------------------------------------------------------------------ */
+
+  var VIEWS = (function () {
+    var API = "https://abacus.jasoncameron.dev";
+    var NS = "politeelm-blog";
+    var online = /^https?:$/.test(location.protocol);
+
+    function cacheKey(key) { return "l1ma0-views-" + key; }
+    function sessionKey(key) { return "l1ma0-counted-" + key; }
+
+    function readCache(key) {
+      try {
+        var v = parseInt(localStorage.getItem(cacheKey(key)) || "0", 10);
+        return v > 0 ? v : 0;
+      } catch (e) {
+        return 0;
+      }
+    }
+
+    function writeCache(key, value) {
+      try { localStorage.setItem(cacheKey(key), String(value)); } catch (e) {}
+    }
+
+    function counted(key) {
+      try { return sessionStorage.getItem(sessionKey(key)) === "1"; } catch (e) { return false; }
+    }
+
+    function markCounted(key) {
+      try { sessionStorage.setItem(sessionKey(key), "1"); } catch (e) {}
+    }
+
+    function request(path) {
+      return fetch(API + path, { cache: "no-store", mode: "cors" }).then(function (res) {
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        return res.json();
+      }).then(function (data) {
+        var n = Number(data && data.value);
+        return isFinite(n) && n >= 0 ? n : 0;
+      });
+    }
+
+    function view(key, increment) {
+      if (!online) return Promise.resolve(null);
+
+      var shouldHit = increment && !counted(key);
+      var url = (shouldHit ? "/hit/" : "/get/") + NS + "/" + encodeURIComponent(key);
+
+      return request(url).then(function (n) {
+        if (shouldHit) markCounted(key);
+        writeCache(key, n);
+        return n;
+      }).catch(function (err) {
+        if (window.console && console.warn) console.warn("[views]", key, err.message);
+        return null;
+      });
+    }
+
+    function format(n) {
+      return Number(n).toLocaleString("zh-CN");
+    }
+
+    return { view: view, cached: readCache, format: format };
+  })();
+
+  function hydrateViews() {
+    var nodes = document.querySelectorAll("[data-view-key]");
+
+    for (var i = 0; i < nodes.length; i++) {
+      (function (node) {
+        var key = node.getAttribute("data-view-key");
+        var hit = node.getAttribute("data-view-hit") === "1";
+        var suffix = node.getAttribute("data-view-suffix") || "";
+
+        function paint(n) {
+          node.textContent = VIEWS.format(n) + " " + suffix;
+          node.removeAttribute("hidden");
+        }
+
+        var cached = VIEWS.cached(key);
+        if (cached > 0) paint(cached);
+
+        VIEWS.view(key, hit).then(function (n) {
+          if (n === null) {
+            if (!cached) node.remove();
+            return;
+          }
+          paint(n);
+        });
+      })(nodes[i]);
+    }
+  }
+
   /* ------------------------------ 数据准备 ------------------------------ */
 
   var posts = raw.map(function (post) {
@@ -262,13 +360,14 @@
     var page = Math.min(Math.max(1, route.page), pages);
     var slice = list.slice((page - 1) * perPage, page * perPage);
 
-    var metaBits = ["共 " + total + " 篇"];
-    if (route.tag) metaBits.push('标签「' + escapeHtml(route.tag) + "」");
-    if (routes_q(route)) metaBits.push("搜索「" + escapeHtml(route.q.trim()) + "」");
-    if (total > 0) metaBits.push("第 " + page + " / " + pages + " 页");
+    var metaBits = ["<span>共 " + total + " 篇</span>"];
+    if (route.tag) metaBits.push("<span>标签「" + escapeHtml(route.tag) + "」</span>");
+    if (routes_q(route)) metaBits.push("<span>搜索「" + escapeHtml(route.q.trim()) + "」</span>");
+    if (total > 0) metaBits.push("<span>第 " + page + " / " + pages + " 页</span>");
+    metaBits.push('<span class="view-count" data-view-key="site" data-view-hit="1" data-view-suffix="次访问" hidden></span>');
 
     var html =
-      '<p class="result-meta">' + metaBits.join(" · ") + "</p>";
+      '<p class="result-meta">' + metaBits.join("") + "</p>";
 
     if (!total) {
       if (posts.length === 0 && !route.tag && !routes_q(route)) {
@@ -404,8 +503,8 @@
         '<header class="post-header">' +
           '<div class="post-meta">' +
             "<time>" + escapeHtml(fmtDate(post.date)) + "</time>" +
-            '<span class="dot"></span>' +
             "<span>约 " + info.minutes + " 分钟 · " + info.chars + " 字</span>" +
+            '<span class="view-count" data-view-key="post-' + escapeHtml(post.slug) + '" data-view-hit="1" data-view-suffix="次阅读" hidden></span>' +
           "</div>" +
           '<h1 class="post-title">' + escapeHtml(post.title) + "</h1>" +
           '<p class="post-lead">' + escapeHtml(post.summary) + "</p>" +
@@ -501,6 +600,7 @@
     }
 
     setNav(route.view);
+    hydrateViews();
     window.scrollTo(0, 0);
   }
 

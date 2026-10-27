@@ -342,9 +342,28 @@ html[data-theme="dark"] .chip.is-active {
 /* ============================ 结果区 ============================ */
 
 .result-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
   margin: 0 0 1.1rem;
   font-size: 0.85rem;
   color: var(--text-soft);
+}
+
+.result-meta > span + span::before {
+  content: "·";
+  margin: 0 0.5rem;
+  opacity: 0.55;
+}
+
+
+.view-count {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.view-count[hidden] {
+  display: none;
 }
 
 .cards {
@@ -588,11 +607,9 @@ html[data-theme="dark"] .pg.is-current {
   color: var(--text-soft);
 }
 
-.post-meta .dot {
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  background: currentColor;
+.post-meta > * + *::before {
+  content: "·";
+  margin-right: 0.5rem;
   opacity: 0.55;
 }
 
