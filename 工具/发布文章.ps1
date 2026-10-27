@@ -210,10 +210,53 @@ if (-not (Test-Path -LiteralPath $文件)) {
   Pause-Exit 1
 }
 
+# 拖进来的是文件夹？自动找里面的 txt（拖整个文件夹也能用）
+if ((Get-Item -LiteralPath $文件).PSIsContainer) {
+  $folder = (Get-Item -LiteralPath $文件).FullName
+  Write-Host "检测到文件夹：$folder" -ForegroundColor Yellow
+
+  $txts = @(Get-ChildItem -LiteralPath $folder -Filter *.txt -File -ErrorAction SilentlyContinue)
+
+  if ($txts.Count -eq 0) {
+    Write-Host "这个文件夹里没有 .txt 文件。" -ForegroundColor Red
+    Write-Host "要么把 txt 放进这个文件夹，要么直接选那个 txt 文件。" -ForegroundColor Yellow
+    Pause-Exit 1
+  }
+
+  if ($txts.Count -eq 1) {
+    $文件 = $txts[0].FullName
+  } else {
+    # 多个 txt 时，优先选和文件夹同名的那个
+    $sameName = $txts | Where-Object { $_.BaseName -eq (Split-Path $folder -Leaf) } | Select-Object -First 1
+    if ($sameName) {
+      $文件 = $sameName.FullName
+    } else {
+      Write-Host "文件夹里有 $($txts.Count) 个 txt：" -ForegroundColor Yellow
+      for ($k = 0; $k -lt $txts.Count; $k++) { Write-Host ("  [{0}] {1}" -f ($k + 1), $txts[$k].Name) }
+      $pick = Read-Host "输入序号选一个（直接回车用第 1 个）"
+      $n = 1
+      if (-not [int]::TryParse($pick, [ref]$n) -or $n -lt 1 -or $n -gt $txts.Count) { $n = 1 }
+      $文件 = $txts[$n - 1].FullName
+    }
+  }
+
+  Write-Host "使用：$文件" -ForegroundColor Green
+}
+
 # ============================ 2. 解析 ============================
 
 Step "读取：$文件"
-$raw = Read-TextSmart $文件
+
+try {
+  $raw = Read-TextSmart $文件
+} catch {
+  Write-Host ""
+  Write-Host "读不了这个文件：$文件" -ForegroundColor Red
+  Write-Host "常见原因：选错了文件夹、文件被别的程序占用（比如记事本/Word 还开着）、或者没有读取权限。" -ForegroundColor Yellow
+  Write-Host "把文件关掉再试，或者直接把那个 .txt 拖到「发文章」图标上。" -ForegroundColor Yellow
+  Pause-Exit 1
+}
+
 $raw = $raw.TrimStart([char]0xFEFF)
 $lines = $raw -split "\r?\n"
 
