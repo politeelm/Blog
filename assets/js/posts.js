@@ -36,25 +36,6 @@ window.BLOG_CONFIG = {
 
 window.BLOG_POSTS = [
   /* POSTS:START */
-  {
-    slug: "post-20261028-030508",
-    title: "PCL2-plus，你的另一个pcl2上位替代",
-    date: "2026-10-28",
-    tags: ["devlog", "release"],
-    summary: "\"devlog\"",
-    content: `
-      <p>PCL2-plus b1</p>
-      <p>devlog:</p>
-      <p>1.[c]重写启动游戏界面</p>
-      <img src="assets/images/1-030507.jpg" alt="" loading="lazy">
-      <p>2.[f]修1复开源pcl2的登录和联机模块，使用陶瓦联机，实现与hmcl，fcl的互通</p>
-      <img src="assets/images/2-030508.jpg" alt="" loading="lazy">
-      <p>3.[+]新增开服功能，尽可能的自动化</p>
-      <img src="assets/images/3-030508.jpg" alt="" loading="lazy">
-      <p>4.[-]减去不必要的更多主题，仅保留灰白色调</p>
-      <p>获取:https://wwanc.lanzouq.com/b00l3728gj 密码:42w5</p>
-    `
-  },
 
   {
     slug: "post-20261028-024025",
@@ -75,7 +56,6 @@ window.BLOG_POSTS = [
       <p>鉴于孤屹的恶劣行径，神秘人士将孤屹全家正义出道。我们的孤屹见此情形，吓得尿出来几滴，选择连夜给名字改了拉黑跑路。最后我们的孤屹先生在拉黑了一亿个正常人之后和那几个脑弱粉丝过上了没羞没臊的引战窜子生活。鉴定结果：重度脑部残疾</p>
     `
   },
-
 
   {
     slug: "post-20261027-052306",
