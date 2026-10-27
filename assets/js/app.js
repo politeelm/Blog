@@ -604,6 +604,61 @@
     window.scrollTo(0, 0);
   }
 
+  /* ------------------------------ 图片放大 ------------------------------ */
+
+  var lightbox = null;
+
+  function ensureLightbox() {
+    if (lightbox) return lightbox;
+
+    lightbox = document.createElement("div");
+    lightbox.className = "lightbox";
+    lightbox.innerHTML =
+      '<button class="lightbox-close" type="button" aria-label="关闭（Esc）">×</button>' +
+      '<img alt="">';
+
+    lightbox.addEventListener("click", function (event) {
+      if (event.target === lightbox || event.target.classList.contains("lightbox-close")) {
+        closeLightbox();
+      }
+    });
+
+    document.body.appendChild(lightbox);
+    return lightbox;
+  }
+
+  function openLightbox(src, alt) {
+    var box = ensureLightbox();
+    var im = box.querySelector("img");
+    im.setAttribute("src", src);
+    im.setAttribute("alt", alt || "");
+    box.classList.add("is-open");
+    document.documentElement.style.overflow = "hidden";
+  }
+
+  function closeLightbox() {
+    if (!lightbox) return;
+    lightbox.classList.remove("is-open");
+    document.documentElement.style.overflow = "";
+  }
+
+  /* 正文里点任意图片 → 放大查看 */
+  document.addEventListener("click", function (event) {
+    var img = event.target;
+    if (!img || img.tagName !== "IMG") return;
+    if (!img.closest || !img.closest(".prose")) return;
+    var src = img.getAttribute("src");
+    if (!src) return;
+    event.preventDefault();
+    openLightbox(src, img.getAttribute("alt"));
+  });
+
+  document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape" && lightbox && lightbox.classList.contains("is-open")) {
+      closeLightbox();
+    }
+  });
+
   /* ------------------------------ 滚动相关 ------------------------------ */
 
   var progress = document.getElementById("progress");

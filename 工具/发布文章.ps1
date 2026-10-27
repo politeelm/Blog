@@ -98,6 +98,23 @@ function Convert-BodyToHtml($lines) {
 
     if ($inList) { [void]$out.AppendLine("      </ul>"); $inList = $false }
 
+    # 图片：![说明](路径)  整行生效
+    $img = [regex]::Match($t, '^!\[(.*?)\]\((.+?)\)$')
+    if ($img.Success) {
+      $caption = $img.Groups[1].Value.Trim()
+      $src = $img.Groups[2].Value.Trim()
+      if ($script:imageMap.ContainsKey($src)) { $src = $script:imageMap[$src] }
+      $srcAttr = Escape-Html $src
+      $capAttr = Escape-Html $caption
+
+      if ($caption) {
+        [void]$out.AppendLine("      <figure><img src=`"$srcAttr`" alt=`"$capAttr`" loading=`"lazy`"><figcaption>$capAttr</figcaption></figure>")
+      } else {
+        [void]$out.AppendLine("      <img src=`"$srcAttr`" alt=`"`" loading=`"lazy`">")
+      }
+      continue
+    }
+
     if ($t.StartsWith("## ")) {
       [void]$out.AppendLine("      <h2>" + (Escape-Html $t.Substring(3).Trim()) + "</h2>")
     } elseif ($t.StartsWith("> ")) {
@@ -116,6 +133,58 @@ function Insert-AfterMarker([string]$path, [string]$marker, [string]$block) {
   if (-not $text.Contains($marker)) { throw "在 $path 里找不到插入标记：$marker" }
   $text = $text.Replace($marker, $marker + $nl + $block.TrimEnd() + $nl)
   [System.IO.File]::WriteAllText($path, $text, (New-Object System.Text.UTF8Encoding($false)))
+}
+
+$script:imageMap = @{}
+
+function Resolve-Images($lines, [string]$sourceDir) {
+  foreach ($raw in $lines) {
+    $t = $raw.Trim()
+    if ([string]::IsNullOrWhiteSpace($t)) { continue }
+
+    $m = [regex]::Match($t, '^!\[(.*?)\]\((.+?)\)$')
+    if (-not $m.Success) { continue }
+
+    $src = $m.Groups[2].Value.Trim()
+    if ($src -match '^(https?:)?//' -or $src -match '^data:') { continue }
+    if ($script:imageMap.ContainsKey($src)) { continue }
+
+    $candidate = if ([IO.Path]::IsPathRooted($src)) { $src } else { Join-Path $sourceDir $src }
+
+    if (-not (Test-Path -LiteralPath $candidate)) {
+      Write-Host "  ⚠ 找不到图片：$candidate（按原路径写进文章）" -ForegroundColor Yellow
+      $script:imageMap[$src] = $src
+      continue
+    }
+
+    $imgDir = Join-Path $root "assets\images"
+    if (-not (Test-Path -LiteralPath $imgDir)) {
+      New-Item -ItemType Directory -Path $imgDir -Force | Out-Null
+    }
+
+    $name = [IO.Path]::GetFileName($candidate)
+    $name = ($name -replace '[^\w\.\-]', '_')
+    $target = Join-Path $imgDir $name
+
+    # 同名但内容不同 → 加时间戳，避免互相覆盖
+    if ((Test-Path -LiteralPath $target) -and
+        ((Get-FileHash -LiteralPath $target).Hash -ne (Get-FileHash -LiteralPath $candidate).Hash)) {
+      $baseName = [IO.Path]::GetFileNameWithoutExtension($name)
+      $ext = [IO.Path]::GetExtension($name)
+      $name = $baseName + "-" + (Get-Date -Format "HHmmss") + $ext
+      $target = Join-Path $imgDir $name
+    }
+
+    Copy-Item -LiteralPath $candidate -Destination $target -Force
+    $script:imageMap[$src] = "assets/images/$name"
+
+    $size = (Get-Item -LiteralPath $target).Length
+    Write-Host ("  图片已复制：{0} → assets/images/{1}（{2:N0} KB）" -f $src, $name, ($size / 1KB)) -ForegroundColor DarkGray
+
+    if ($size -gt 2MB) {
+      Write-Host ("  ⚠ 这张图 {0} MB，建议压到 500KB 以内，否则读者要等" -f [math]::Round($size / 1MB, 1)) -ForegroundColor Yellow
+    }
+  }
 }
 
 function Step([string]$msg) { Write-Host $msg -ForegroundColor Cyan }
@@ -163,6 +232,8 @@ if ([string]::IsNullOrWhiteSpace($title)) {
   Pause-Exit 1
 }
 
+$sourceDir = (Get-Item -LiteralPath $文件).DirectoryName
+Resolve-Images $bodyLines $sourceDir
 $bodyHtml = Convert-BodyToHtml $bodyLines
 if ([string]::IsNullOrWhiteSpace($bodyHtml)) {
   Write-Host "正文是空的（第 4 行往后没有内容）。" -ForegroundColor Red

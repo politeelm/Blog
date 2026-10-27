@@ -124,6 +124,30 @@ Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
 > ⚠️ `content` 用的是模板字符串，里面**不要出现反引号 ` 和 `${`**。
 > 需要代码示例时用 `<code>` / `<pre>` 标签，不要用 Markdown 语法。
 
+### 在正文里插图片
+
+**用桌面工具发文时**：把图片和 txt 放在同一个文件夹，正文里写一行就行：
+
+```
+![图注写在这里](photo.jpg)
+```
+
+发布时工具会自动把图片复制进 `assets/images/`，并生成带图注的 `<figure>`。
+图注留空就写 `![](photo.jpg)`，只出图不出字。也支持子路径（`images/photo.jpg`）和网址（`https://...`，不会复制）。
+
+**直接改 `posts.js` 时**，手写 HTML：
+
+```html
+<figure>
+  <img src="assets/images/photo.jpg" alt="说明" loading="lazy">
+  <figcaption>图片下面的说明文字</figcaption>
+</figure>
+```
+
+图片放 `assets/images/`。站点上的图片**点一下会放大**，按 `Esc` 或点击空白处关闭。
+
+建议单张压到 500KB 以内（手机原图动辄 3–5MB，读者要等很久）。
+
 ### 正文能用的标签
 
 `<h2>` `<h3>` 小标题、`<p>` 段落、`<ul>`/`<ol>` 列表、`<blockquote>` 引用、
