@@ -75,7 +75,6 @@
 
     return (
       '<div class="site-counter">' +
-        '<span class="site-counter-label">累计浏览</span>' +
         '<img class="site-counter-img" src="' + escapeHtml(moe) + '" alt="访问量" ' +
           'loading="lazy" referrerpolicy="no-referrer" data-fallback="' + escapeHtml(fallback) + '">' +
       "</div>"
@@ -371,6 +370,7 @@
     app.innerHTML =
       '<section class="hero">' +
         "<h1>" + escapeHtml(cfg.tagline || "") + "</h1>" +
+        (isHomeList(route) ? counterBlockHtml() : "") +
         "<p>" + escapeHtml(cfg.intro || "") + "</p>" +
         (cfg.links && cfg.links.length
           ? '<div class="hero-links">' +
@@ -382,7 +382,6 @@
             "</div>"
           : "") +
       "</section>" +
-      (isHomeList(route) ? counterBlockHtml() : "") +
       '<section class="listing">' +
         '<div class="toolbar">' +
           '<label class="search">' +
