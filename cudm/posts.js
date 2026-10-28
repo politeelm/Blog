@@ -19,7 +19,7 @@ window.BLOG_CONFIG = {
 
   aboutTitle: "关于 cudm",
   aboutHtml:
-    '<p class="mail-row"><a class="btn" href="mailto:steamryy@outlook.com">steamryy@outlook.com</a></p>',
+    "<p>想投稿？发到这个邮件：<a href='mailto:steamryy@outlook.com'>steamryy@outlook.com</a></p>",
 
   /* 标签清单：这里写了就会出现在筛选栏和标签页，哪怕暂时没有文章。
      顺序就是显示顺序；文章里用了这里没有的标签，会自动补在后面。 */
