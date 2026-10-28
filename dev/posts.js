@@ -6,7 +6,7 @@
 window.BLOG_CONFIG = {
   title: "dev",
   tagline: "个人项目简介",
-  intro: "这里放我自己做的东西：写过的程序、改过的工具、踩过的坑。",
+  intro: "我爱vibe大变",
   author: "L1MA0",
   email: "steamryy@outlook.com",
   siteUrl: "https://politeelm.github.io/dev",

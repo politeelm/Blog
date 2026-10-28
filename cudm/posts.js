@@ -18,13 +18,8 @@ window.BLOG_CONFIG = {
   perPage: 4,
 
   aboutTitle: "关于 cudm",
-  aboutSub: "此站收录本人所遇的奇人异事。",
   aboutHtml:
-    "<p>这里的每一条，都是我在 cudm 圈子里亲眼见到的人、亲眼见到的事。</p>" +
-    "<p>有补充、有异议、想投稿，都发邮件：</p>" +
-    '<p class="mail-row"><a class="btn" href="mailto:steamryy@outlook.com">steamryy@outlook.com</a></p>' +
-    "<p>邮件写清楚时间、地点、发生了什么就行，不用讲究文笔。</p>" +
-    "<blockquote><p>现实不用讲逻辑，讲逻辑的写不出这种东西。</p></blockquote>",
+    '<p class="mail-row"><a class="btn" href="mailto:steamryy@outlook.com">steamryy@outlook.com</a></p>',
 
   /* 标签清单：这里写了就会出现在筛选栏和标签页，哪怕暂时没有文章。
      顺序就是显示顺序；文章里用了这里没有的标签，会自动补在后面。 */
