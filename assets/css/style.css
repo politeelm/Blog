@@ -1080,3 +1080,32 @@ html[data-theme="dark"] .pg.is-current {
     transition-duration: 0.001ms !important;
   }
 }
+
+/* ============================ 访问量徽章 ============================ */
+
+.site-counter {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin: 0 0 1.8rem;
+  font-size: 0.82rem;
+  color: var(--text-soft);
+}
+
+.site-counter-label {
+  letter-spacing: 0.08em;
+}
+
+.site-counter-img {
+  height: 2.2rem;
+  width: auto;
+  border-radius: 4px;
+  opacity: 0.95;
+}
+
+@media (max-width: 560px) {
+  .site-counter-img {
+    height: 1.9rem;
+  }
+}

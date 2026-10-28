@@ -54,28 +54,49 @@
      图片每加载一次算一次浏览；加载失败就整块隐藏。
      ------------------------------------------------------------------ */
 
-  function counterImg(key, label) {
-    var base = cfg.counterPath || "politeelm.github.io/cudm";
-    var src =
-      "https://hits.sh/" + base + "/" + key + ".svg?label=" +
-      encodeURIComponent(label) + "&color=b0492b&style=flat";
+  /* ------------------------------ 访问量徽章 ------------------------------
+     Moe-counter 的图（count.getloli.com）在国内常被 Cloudflare 挑战挡住，
+     所以带一个兜底：图挂了自动换成 hits.sh 的 SVG 徽章，不会变成裂图。
+     只放在各板块的首页（第 1 页、未筛选），文章页和分页不显示。
+     ------------------------------------------------------------------ */
+
+  function isHomeList(route) {
+    return route.view === "list" && route.page === 1 && !route.tag && !routes_q(route);
+  }
+
+  function counterBlockHtml() {
+    var moe = cfg.counterMoe || "";
+    if (!moe) return "";
+
+    var path = cfg.counterPath || "politeelm.github.io/cudm";
+    var fallback =
+      "https://hits.sh/" + path + "/index.svg?label=" +
+      encodeURIComponent("浏览") + "&color=b0492b&style=flat";
 
     return (
-      '<span class="view-count">' +
-        '<img src="' + src + '" alt="' + escapeHtml(label) + '" loading="lazy" referrerpolicy="no-referrer">' +
-      "</span>"
+      '<div class="site-counter">' +
+        '<span class="site-counter-label">累计浏览</span>' +
+        '<img class="site-counter-img" src="' + escapeHtml(moe) + '" alt="访问量" ' +
+          'loading="lazy" referrerpolicy="no-referrer" data-fallback="' + escapeHtml(fallback) + '">' +
+      "</div>"
     );
   }
 
-  function hydrateCounters() {
-    var imgs = document.querySelectorAll(".view-count img");
+  function mountCounters() {
+    var imgs = document.querySelectorAll(".site-counter-img");
     for (var i = 0; i < imgs.length; i++) {
       (function (img) {
-        function hide() {
-          if (img.parentNode) img.parentNode.style.display = "none";
+        function swap() {
+          var fb = img.getAttribute("data-fallback");
+          if (fb && img.getAttribute("src") !== fb) {
+            img.setAttribute("src", fb);
+            return;
+          }
+          var box = img.parentNode;
+          if (box) box.style.display = "none";
         }
-        img.addEventListener("error", hide);
-        if (img.complete && img.naturalWidth === 0) hide();
+        img.addEventListener("error", swap);
+        if (img.complete && img.naturalWidth === 0) swap();
       })(imgs[i]);
     }
   }
@@ -296,7 +317,6 @@
     if (route.tag) metaBits.push("<span>标签「" + escapeHtml(route.tag) + "」</span>");
     if (routes_q(route)) metaBits.push("<span>搜索「" + escapeHtml(route.q.trim()) + "」</span>");
     if (total > 0) metaBits.push("<span>第 " + page + " / " + pages + " 页</span>");
-    metaBits.push(counterImg("index", "浏览"));
 
     var html =
       '<p class="result-meta">' + metaBits.join("") + "</p>";
@@ -362,6 +382,7 @@
             "</div>"
           : "") +
       "</section>" +
+      (isHomeList(route) ? counterBlockHtml() : "") +
       '<section class="listing">' +
         '<div class="toolbar">' +
           '<label class="search">' +
@@ -436,7 +457,6 @@
           '<div class="post-meta">' +
             "<time>" + escapeHtml(fmtDate(post.date)) + "</time>" +
             "<span>约 " + info.minutes + " 分钟 · " + info.chars + " 字</span>" +
-            counterImg("post-" + post.slug, "阅读") +
           "</div>" +
           '<h1 class="post-title">' + escapeHtml(post.title) + "</h1>" +
           '<p class="post-lead">' + escapeHtml(post.summary) + "</p>" +
@@ -543,7 +563,7 @@
     }
 
     setNav(route.view);
-    hydrateCounters();
+    mountCounters();
     window.scrollTo(0, 0);
   }
 

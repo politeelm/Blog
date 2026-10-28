@@ -11,6 +11,7 @@ window.BLOG_CONFIG = {
   email: "steamryy@outlook.com",
   siteUrl: "https://politeelm.github.io/dev",
   counterPath: "politeelm.github.io/dev",
+  counterMoe: "https://count.getloli.com/@devlog?theme=booru-lewd&padding=7&offset=1&align=top&scale=1&pixelated=1&darkmode=auto",
   perPage: 6,
 
   aboutTitle: "关于 dev",

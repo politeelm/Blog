@@ -14,6 +14,7 @@ window.BLOG_CONFIG = {
   email: "steamryy@outlook.com",
   siteUrl: "https://politeelm.github.io/cudm",
   counterPath: "politeelm.github.io/cudm",
+  counterMoe: "https://count.getloli.com/@Blog?theme=booru-lewd&padding=7&offset=1&align=top&scale=1&pixelated=1&darkmode=auto",
   perPage: 4,
 
   aboutTitle: "关于 cudm",
