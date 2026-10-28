@@ -39,25 +39,6 @@ $scriptDir = $PSScriptRoot
 if ([string]::IsNullOrWhiteSpace($scriptDir)) { $scriptDir = (Get-Location).Path }
 $root = Split-Path $scriptDir -Parent     # 仓库根目录（工具 的上一级）
 
-# ---------------- 板块：cudm（奇人异事）/ dev（项目简介） ----------------
-if ([string]::IsNullOrWhiteSpace($板块)) {
-  $answer = ""
-  try {
-    Add-Type -AssemblyName Microsoft.VisualBasic | Out-Null
-    $answer = [Microsoft.VisualBasic.Interaction]::InputBox("发布到哪个板块？`n`n输入 cudm 或 dev，直接确定 = cudm", "选择板块", "cudm")
-  } catch { $answer = "cudm" }
-  if ([string]::IsNullOrWhiteSpace($answer)) { $answer = "cudm" }
-  $板块 = $answer
-}
-
-$板块 = $板块.Trim().Trim("/").ToLower()
-if ($板块 -ne "cudm" -and $板块 -ne "dev") {
-  Write-Host "板块只能是 cudm 或 dev，收到的是：$板块" -ForegroundColor Red
-  Pause-Exit 1
-}
-
-$sectionDir = Join-Path $root $板块
-$siteUrl = "https://politeelm.github.io/$板块"
 
 $nl = "`r`n"
 
@@ -207,6 +188,60 @@ function Resolve-Images($lines, [string]$sourceDir) {
   }
 }
 
+function Select-Section([string]$prompt = "选择板块") {
+  try {
+    Add-Type -AssemblyName System.Windows.Forms | Out-Null
+    Add-Type -AssemblyName System.Drawing | Out-Null
+  } catch {
+    # 图形界面起不来时退回命令行输入（-不暂停 的自动化场景下不阻塞）
+    if (-not $不暂停) {
+      Write-Host "图形界面不可用，改用手动输入。" -ForegroundColor Yellow
+      $ans = (Read-Host "输入 cudm 或 dev").Trim().ToLower()
+      if ($ans -eq "dev" -or $ans -eq "cudm") { return $ans }
+    }
+    return $null
+  }
+
+  $form = New-Object System.Windows.Forms.Form
+  $form.Text = "选择板块"
+  $form.ClientSize = New-Object System.Drawing.Size(360, 208)
+  $form.StartPosition = "CenterScreen"
+  $form.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::FixedDialog
+  $form.MaximizeBox = $false
+  $form.MinimizeBox = $false
+  $form.TopMost = $true
+
+  $label = New-Object System.Windows.Forms.Label
+  $label.Text = $prompt
+  $label.SetBounds(22, 18, 316, 24)
+  $form.Controls.Add($label)
+
+  $b1 = New-Object System.Windows.Forms.Button
+  $b1.Text = "cudm · 奇人异事"
+  $b1.Font = New-Object System.Drawing.Font("Microsoft YaHei UI", 10)
+  $b1.SetBounds(22, 52, 316, 44)
+  $b1.Add_Click({ $script:chosenSection = "cudm"; $form.Close() })
+
+  $b2 = New-Object System.Windows.Forms.Button
+  $b2.Text = "dev · 项目简介"
+  $b2.Font = New-Object System.Drawing.Font("Microsoft YaHei UI", 10)
+  $b2.SetBounds(22, 102, 316, 44)
+  $b2.Add_Click({ $script:chosenSection = "dev"; $form.Close() })
+
+  $b3 = New-Object System.Windows.Forms.Button
+  $b3.Text = "取消"
+  $b3.SetBounds(22, 154, 316, 32)
+  $b3.DialogResult = [System.Windows.Forms.DialogResult]::Cancel
+
+  $form.Controls.AddRange(@($b1, $b2, $b3))
+  $form.CancelButton = $b3
+
+  $script:chosenSection = $null
+  [void]$form.ShowDialog()
+  $form.Dispose()
+  return $script:chosenSection
+}
+
 function Step([string]$msg) { Write-Host $msg -ForegroundColor Cyan }
 
 # ============================ 1. 选文件 ============================
@@ -307,6 +342,25 @@ $tags = @()
 if (-not [string]::IsNullOrWhiteSpace($tagsLine)) {
   $tags = @($tagsLine -split "[,，]" | ForEach-Object { $_.Trim() } | Where-Object { $_ })
 }
+
+# ============================ 选板块（发布前手动选） ============================
+
+if ([string]::IsNullOrWhiteSpace($板块)) {
+  $板块 = Select-Section "这篇要发到哪个板块？"
+  if ([string]::IsNullOrWhiteSpace($板块)) {
+    Write-Host "已取消，什么都没做。" -ForegroundColor Yellow
+    Pause-Exit 0
+  }
+}
+
+$板块 = $板块.Trim().Trim("/").ToLower()
+if ($板块 -ne "cudm" -and $板块 -ne "dev") {
+  Write-Host "板块只能是 cudm 或 dev，收到的是：$板块" -ForegroundColor Red
+  Pause-Exit 1
+}
+
+$sectionDir = Join-Path $root $板块
+$siteUrl = "https://politeelm.github.io/$板块"
 
 # ============================ 3. 生成信息 ============================
 
