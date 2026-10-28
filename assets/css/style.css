@@ -1102,3 +1102,11 @@ html[data-theme="dark"] .pg.is-current {
     height: 2.2rem;
   }
 }
+/* 文章页阅读量徽章 */
+.post-view-count img {
+  height: 1.05rem;
+  width: auto;
+  border-radius: 3px;
+  vertical-align: -0.15em;
+  opacity: 0.9;
+}

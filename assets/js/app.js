@@ -81,8 +81,23 @@
     );
   }
 
+  /* 每篇文章的基础阅读量：hits.sh 的 SVG 徽章，图片加载失败就隐藏 */
+  function postCounterHtml(post) {
+    var path = cfg.counterPath || "politeelm.github.io/cudm";
+    var src =
+      "https://hits.sh/" + path + "/" +
+      (/^post-/.test(post.slug) ? "" : "post-") + encodeURIComponent(post.slug) +
+      ".svg?label=" + encodeURIComponent("阅读") + "&color=b0492b&style=flat";
+
+    return (
+      '<span class="view-count post-view-count">' +
+        '<img src="' + src + '" alt="阅读量" loading="lazy" referrerpolicy="no-referrer">' +
+      "</span>"
+    );
+  }
+
   function mountCounters() {
-    var imgs = document.querySelectorAll(".site-counter-img");
+    var imgs = document.querySelectorAll(".site-counter-img, .post-view-count img");
     for (var i = 0; i < imgs.length; i++) {
       (function (img) {
         function swap() {
@@ -456,6 +471,7 @@
           '<div class="post-meta">' +
             "<time>" + escapeHtml(fmtDate(post.date)) + "</time>" +
             "<span>约 " + info.minutes + " 分钟 · " + info.chars + " 字</span>" +
+            postCounterHtml(post) +
           "</div>" +
           '<h1 class="post-title">' + escapeHtml(post.title) + "</h1>" +
           '<p class="post-lead">' + escapeHtml(post.summary) + "</p>" +
