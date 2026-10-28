@@ -15,12 +15,9 @@ window.BLOG_CONFIG = {
   perPage: 6,
 
   aboutTitle: "关于 dev",
-  aboutSub: "这里放我自己做的东西。",
   aboutHtml:
-    "<p>做过的程序、改过的工具、踩过的坑，都记在这里，方便以后自己回看，也让别人少走点弯路。</p>" +
-    "<p>代码基本都在 GitHub：</p>" +
-    '<p class="mail-row"><a class="btn" href="https://github.com/politeelm">github.com/politeelm</a></p>' +
-    '<p>有问题或者想聊，邮件：<a href="mailto:steamryy@outlook.com">steamryy@outlook.com</a></p>',
+    "<p>请输入文本</p>" +
+    "<p>有问题或者想聊，邮件：<a href='mailto:steamryy@outlook.com'>steamryy@outlook.com</a></p>",
 
   tags: [
     "devlog",
