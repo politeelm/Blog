@@ -15,11 +15,22 @@
 
 param(
   [string]$消息 = "",
-  [switch]$NoPush
+  [switch]$NoPush,
+  [switch]$不暂停
 )
 
 # git 会把 warning 写到 stderr，Stop 模式下会被当成致命错误，所以这里用 Continue 手动判断
 $ErrorActionPreference = "Continue"
+
+try {
+  chcp 65001 | Out-Null
+  [Console]::OutputEncoding = New-Object System.Text.UTF8Encoding($false)
+} catch { }
+
+function Pause-Exit([int]$code = 0) {
+  if (-not $不暂停) { Read-Host "按回车关闭" | Out-Null }
+  exit $code
+}
 
 $root = $PSScriptRoot
 if ([string]::IsNullOrWhiteSpace($root)) { $root = (Get-Location).Path }
@@ -27,7 +38,7 @@ Set-Location $root
 
 if (-not (Test-Path (Join-Path $root ".git"))) {
   Write-Host "这里不是 git 仓库：$root" -ForegroundColor Red
-  exit 1
+  Pause-Exit 1
 }
 
 # ---------- 1. 版本号 +1 ----------
@@ -67,13 +78,24 @@ if ($current -eq 0) {
 git add -A 2>$null
 if ($LASTEXITCODE -ne 0) {
   Write-Host "git add 失败，停在这里。" -ForegroundColor Red
-  exit 1
+  Pause-Exit 1
 }
 
 $staged = git status --porcelain 2>$null
 if ([string]::IsNullOrWhiteSpace($staged)) {
   Write-Host "没有需要提交的改动。" -ForegroundColor Yellow
-  exit 0
+  Pause-Exit 0
+}
+
+if ([string]::IsNullOrWhiteSpace($消息) -and -not $不暂停) {
+  try {
+    Add-Type -AssemblyName Microsoft.VisualBasic | Out-Null
+    $answer = [Microsoft.VisualBasic.Interaction]::InputBox(
+      "这次改了什么？（可以直接回车，用时间当说明）",
+      "推送到 GitHub",
+      "")
+    if ($null -ne $answer) { $消息 = $answer.Trim() }
+  } catch { }
 }
 
 if ([string]::IsNullOrWhiteSpace($消息)) {
@@ -83,13 +105,13 @@ if ([string]::IsNullOrWhiteSpace($消息)) {
 git commit -q -m $消息 2>$null
 if ($LASTEXITCODE -ne 0) {
   Write-Host "git commit 失败，停在这里。" -ForegroundColor Red
-  exit 1
+  Pause-Exit 1
 }
 Write-Host "已提交：$消息" -ForegroundColor Green
 
 if ($NoPush) {
   Write-Host "（-NoPush，没有推送）" -ForegroundColor Yellow
-  exit 0
+  Pause-Exit 0
 }
 
 # ---------- 3. 推送（失败自动重试） ----------
@@ -109,7 +131,7 @@ for ($i = 1; $i -le 4; $i++) {
 if (-not $ok) {
   Write-Host ""
   Write-Host "推送一直失败。改动已经提交在本地，网络好了再执行一次 git push 就行。" -ForegroundColor Red
-  exit 1
+  Pause-Exit 1
 }
 
 Write-Host ""

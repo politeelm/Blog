@@ -210,6 +210,9 @@ Branch 选 `main` + `/ (root)`，Save。
 仓库名 politeelm.github.io  →  https://politeelm.github.io/
 ```
 
+**双击桌面「推送」**：弹一个输入框让你写这次改了什么（留空就用时间），点确定 → 自动加版本号 → 提交 → 推送。
+命令行等价写法：`.\发布.ps1 -消息 "改了关于页"`
+
 以后每次更新：
 
 ```powershell
