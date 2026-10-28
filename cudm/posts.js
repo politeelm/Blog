@@ -7,13 +7,23 @@
    ========================================================================== */
 
 window.BLOG_CONFIG = {
-  title: "L1MA0",
-  tagline: "L1MA0的个人网页",
-  intro: "如果我冒犯到了你，那我说的就是你，憋着",
+  title: "cudm奇人异事",
+  tagline: "cudm奇人异事",
+  intro: "收录本人所遇的奇人异事。如果我冒犯到了你，那我说的就是你，憋着。",
   author: "L1MA0",
   email: "steamryy@outlook.com",
-  siteUrl: "https://politeelm.github.io/Blog",
+  siteUrl: "https://politeelm.github.io/cudm",
+  counterPath: "politeelm.github.io/cudm",
   perPage: 4,
+
+  aboutTitle: "关于 cudm",
+  aboutSub: "此站收录本人所遇的奇人异事。",
+  aboutHtml:
+    "<p>这里的每一条，都是我在 cudm 圈子里亲眼见到的人、亲眼见到的事。</p>" +
+    "<p>有补充、有异议、想投稿，都发邮件：</p>" +
+    '<p class="mail-row"><a class="btn" href="mailto:steamryy@outlook.com">steamryy@outlook.com</a></p>' +
+    "<p>邮件写清楚时间、地点、发生了什么就行，不用讲究文笔。</p>" +
+    "<blockquote><p>现实不用讲逻辑，讲逻辑的写不出这种东西。</p></blockquote>",
 
   /* 标签清单：这里写了就会出现在筛选栏和标签页，哪怕暂时没有文章。
      顺序就是显示顺序；文章里用了这里没有的标签，会自动补在后面。 */
@@ -30,31 +40,13 @@ window.BLOG_CONFIG = {
 
   links: [
     { label: "RSS", href: "feed.xml" },
-    { label: "GitHub", href: "https://github.com/politeelm/Blog" }
+    { label: "GitHub", href: "https://github.com/politeelm/politeelm.github.io" }
   ]
 };
 
 window.BLOG_POSTS = [
   /* POSTS:START */
-  {
-    slug: "post-20261028-031422",
-    title: "PCL2-plus，你的另一个pcl2上位替代",
-    date: "2026-10-28",
-    tags: ["devlog", "release"],
-    summary: "\"devlog\"",
-    content: `
-      <p>PCL2-plus b1</p>
-      <p>devlog:</p>
-      <p>1.[c]重写启动游戏界面</p>
-      <img src="assets/images/1-031422.jpg" alt="" loading="lazy">
-      <p>2.[f]修复开源pcl2的登录和联机模块，使用陶瓦联机，实现与hmcl，fcl的互通</p>
-      <img src="assets/images/2-031422.jpg" alt="" loading="lazy">
-      <p>3.[+]新增开服功能，尽可能的自动化</p>
-      <img src="assets/images/3-031422.jpg" alt="" loading="lazy">
-      <p>4.[-]减去不必要的更多主题，仅保留灰白色调</p>
-      <p>获取:https://wwanc.lanzouq.com/b00l3728gj 密码:42w5</p>
-    `
-  },
+
 
 
   {
@@ -65,14 +57,14 @@ window.BLOG_POSTS = [
     summary: "\"一时之间甚至让人看不出是真情流露还是窜子\"",
     content: `
       <p>不知何时，一个叫做孤屹的野种出现在了眼前。不仅脸皮厚到能使用两杀作为击杀秀素材并以为自己牛逼起一个大能名字，其成名之作“这个游戏最小丑的群体”简直是cudm童站本就恶劣如茅厕的环境中最臭的一坨狗屎。其中的主旨是，觉得自己买了556神话但是送了一个质量更高的，于是认为自己被背刺了。一副众人皆醉我独醒的架势</p>
-      <figure><img src="assets/images/1.jpg" alt="众人皆醉我独醒的孤屹" loading="lazy"><figcaption>众人皆醉我独醒的孤屹</figcaption></figure>
+      <figure><img src="../assets/images/1.jpg" alt="众人皆醉我独醒的孤屹" loading="lazy"><figcaption>众人皆醉我独醒的孤屹</figcaption></figure>
       <p>先不提什么是背刺，一个游戏皮肤质量越来越好，蒸蒸日上难道不是好事吗？而且距离你买了这个皮肤也有很长时间了，也该有一点长进了。更何况556神话的手感和特效是这个送的皮肤远远比不来的。能说出来这种话简直是对人类智商的侮辱，拉低了cudm本来就不高的人均智商是不是要给所有cudm玩家磕头谢罪呢？</p>
       <p>如果仅仅是这件事，还难以引发众怒，但是他在评论区对有脑子的人大狗叫的时候让人忍俊不禁的同时产生疑问：作为一个大脑完整的灵长类动物，为什么在明知道几把不能当烤肠的时候，非要给自己的红肠改花刀并伸在篝火上烤。明明能认识到是非对错，但是非要装作不知道。这个时候就有人通过家访发现了一个老生常谈的问题：我们的何先生是鸣潮玩家，而此次cudm联动是崩3联动。。，，，这就是我们二游玩家最讲理的，最不颠倒黑白的，智商最高的，最不自私自利的群体呀。</p>
-      <figure><img src="assets/images/2.jpg" alt="气不过又打不着的正常用户belike:" loading="lazy"><figcaption>气不过又打不着的正常用户belike:</figcaption></figure>
+      <figure><img src="../assets/images/2.jpg" alt="气不过又打不着的正常用户belike:" loading="lazy"><figcaption>气不过又打不着的正常用户belike:</figcaption></figure>
       <p>事实证明，我们的何先生就是童厕这个站台上，最臭的两个茅坑cudm和二游中从挡板下横穿在两个坑位的黄金巨蟒。其散播的风气也成功的在10月份的开开开箱新爆料中成功转化为另一坨叫做lw3背刺的狗屎，给本来就恶臭的社区带来更加难以去除的大便味。</p>
       <p>然后就是童站用户们前所未有的联合起来开始拷打弱智，其中主力alderose率先举起大旗，吹响了清洁厕所的号角，cudm玩家们们纷纷投入战场，试图清理干净这一条黄金巨蟒。但是人们都太小看我们孤屹的阿Q精神了。也不知道是不是死爸妈了回家奔丧，不知道我们孤屹哪来的时间，能在上学期间保持精神胜利的同时，一边打开限制评论，一边举报别人的稿件，一边举报封禁别人的账号，一边一个个私信辱骂别人并一击脱离。到处散发野爹证。我们至今不知道何先生一共散发了多少野爹证。成功臭晕臭休克了一个又一个厕所清洁工。</p>
-      <figure><img src="assets/images/3.jpg" alt="加入前：" loading="lazy"><figcaption>加入前：</figcaption></figure>
-      <figure><img src="assets/images/4.jpg" alt="加入后：" loading="lazy"><figcaption>加入后：</figcaption></figure>
+      <figure><img src="../assets/images/3.jpg" alt="加入前：" loading="lazy"><figcaption>加入前：</figcaption></figure>
+      <figure><img src="../assets/images/4.jpg" alt="加入后：" loading="lazy"><figcaption>加入后：</figcaption></figure>
       <p>鉴于孤屹的恶劣行径，神秘人士将孤屹全家正义出道。我们的孤屹见此情形，吓得尿出来几滴，选择连夜给名字改了拉黑跑路。最后我们的孤屹先生在拉黑了一亿个正常人之后和那几个脑弱粉丝过上了没羞没臊的引战窜子生活。鉴定结果：重度脑部残疾</p>
     `
   },

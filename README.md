@@ -32,30 +32,47 @@ python -m http.server 8000
 ## 二、目录结构
 
 ```
-D:\网站\
-├── index.html            唯一的页面外壳（内容由 JS 渲染）
-├── 404.html              出错页，自动跳回首页
-├── feed.xml              RSS 订阅源
-├── .nojekyll             告诉 GitHub Pages 别用 Jekyll 处理
-├── 新建文章.ps1          一条命令添加新文章
-├── assets/
-│   ├── css/style.css     全部样式
-│   └── js/
-│       ├── posts.js      ★ 站点配置 + 所有文章数据（主要改这个）
-│       ├── app.js        路由、分页、筛选、搜索、渲染
-│       └── main.js       深色模式切换
+politeelm.github.io/          ← 仓库名就是域名，一个仓库装下整站
+├── index.html                主页：个人介绍 + 两个板块入口
+├── cudm/                     ★ 板块一：奇人异事
+│   ├── index.html            列表 / 文章 / 标签 / 关于（同一个文件渲染）
+│   ├── posts.js              板块配置 + 本板块所有文章
+│   ├── feed.xml              本板块 RSS
+│   └── 404.html
+├── dev/                      ★ 板块二：项目简介（结构和 cudm 完全一样）
+│   ├── index.html
+│   ├── posts.js              这里放着 PCL2-plus 那篇
+│   ├── feed.xml
+│   └── 404.html
+├── assets/                   两个板块共用
+│   ├── css/style.css         板块样式
+│   ├── css/home.css          主页样式
+│   ├── js/app.js             路由、分页、筛选、搜索、灯箱
+│   ├── js/main.js            深色模式
+│   └── images/               文章图片、网站图标
+├── 工具/发布文章.ps1          txt → 文章 → 推送
+├── 工具/删除文章.ps1          标题 → 删除 → 推送
+├── 发布.ps1                  版本号 +1、提交、推送
 └── README.md
 ```
 
-**核心只有一件事：文章不是 HTML 文件，而是 `assets/js/posts.js` 里的一个对象。**
+**地址对照**
 
+| 地址 | 内容 |
+| --- | --- |
+| `politeelm.github.io/` | 主页，选板块 |
+| `politeelm.github.io/cudm/` | cudm 奇人异事 |
+| `politeelm.github.io/dev/` | dev 项目简介 |
+
+两个板块的代码是同一份（`assets/js/app.js`），只有 `posts.js` 里的配置和文章不同。
+所以改样式、改功能，两个板块一起变；加文章只影响各自板块。
 ---
 
 ## 三、改成你自己的（5 分钟）
 
 ### 1. 站点信息
 
-打开 `assets/js/posts.js`，最上面的 `BLOG_CONFIG` 就是全部可配置项：
+打开对应板块的 `posts.js`（`cudm/posts.js` 或 `dev/posts.js`），最上面的 `BLOG_CONFIG` 就是全部可配置项：
 
 ```js
 window.BLOG_CONFIG = {
@@ -64,7 +81,8 @@ window.BLOG_CONFIG = {
   intro: "这里存放……",       // 首页那段介绍
   author: "L1MA0",            // 关于页
   email: "steamryy@outlook.com",  // 关于页（投稿邮箱）
-  siteUrl: "https://yourname.github.io/blog",
+  siteUrl: "https://politeelm.github.io/cudm",   // 每个板块不一样
+  counterPath: "politeelm.github.io/cudm",      // 计数徽章用的路径
   perPage: 4,                 // ★ 每页显示几篇，改这个就改分页
   tags: ["奇异人士", ...],     // ★ 标签清单：写了就会出现在筛选栏，没文章也显示
   links: [...]                // 首页那排小按钮
@@ -91,7 +109,7 @@ window.BLOG_CONFIG = {
 ```
 
 脚本会往 `posts.js` 顶部插入一条数据、往 `feed.xml` 插入一条，然后打印接下来该干什么。
-接着打开 `assets/js/posts.js`，把 `content` 里的占位内容换成正文即可（正文就是 HTML）。
+工具会自动改好对应板块的 `posts.js`，不用你手动找文件。
 
 如果提示「无法加载文件…因为在此系统上禁止运行脚本」，执行一次这个（只影响当前用户）：
 
@@ -163,51 +181,40 @@ Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
 
 ## 五、发布到 GitHub Pages
 
-### 1. 建仓库
+仓库名必须是 **`politeelm.github.io`**（正好等于你的域名），选 **Public**。
+这样 Pages 从根路径提供服务，`/cudm/`、`/dev/` 才对得上。
 
-GitHub 右上角 **+** → **New repository**：名字填 `blog`，选 **Public**，
-不要勾选任何初始化文件，直接 Create。
+从旧的 `Blog` 仓库改名即可：**Settings → Rename** → 填 `politeelm.github.io`。
+提交历史、Pages 配置都保留，只是地址从 `/Blog/` 变成根路径。
 
-### 2. 推上去
-
-```powershell
-git init
-git add -A
-git commit -m "first commit"
-
-git config user.name "politeelm"
-git config user.email "politeelm@users.noreply.github.com"
-
-git branch -M main
-git remote add origin https://github.com/你的用户名/blog.git
-git push -u origin main
-```
-
-> 推送时 GitHub 要 **Personal Access Token**（Settings → Developer settings →
-> Personal access tokens → 勾 `repo`），账号密码早就不支持了。
-
-### 3. 开 Pages
-
-仓库 → **Settings** → **Pages**：Source 选 `Deploy from a branch`，
-Branch 选 `main` + `/ (root)`，Save。等 1～2 分钟。
-
-```
-仓库名 blog                 →  https://你的用户名.github.io/blog/
-仓库名 你的用户名.github.io   →  https://你的用户名.github.io/
-```
-
-> 如果是 `/blog/` 这种子路径，只需把 `404.html` 里的 `<base href="/">`
-> 改成 `<base href="/blog/">`，其他文件全是相对路径，不用动。
-
-### 4. 以后更新
+### 推上去
 
 ```powershell
 git add -A
-git commit -m "新文章：今天的晚饭"
+git commit -m "改成主页 + 两个板块"
 git push
 ```
 
----
+改名后远程地址也变了，如果 push 报错就先改一下：
+
+```powershell
+git remote set-url origin https://github.com/politeelm/politeelm.github.io.git
+```
+
+### Pages 设置
+
+仓库 → **Settings → Pages**：Source 选 `Deploy from a branch`，
+Branch 选 `main` + `/ (root)`，Save。
+
+```
+仓库名 politeelm.github.io  →  https://politeelm.github.io/
+```
+
+以后每次更新：
+
+```powershell
+.\发布.ps1 -消息 "说明"
+```
 
 ## 六、改完没生效？（缓存）
 
@@ -225,20 +232,17 @@ GitHub Pages 给 js/css 设了约 10 分钟缓存，浏览器会先用本地副�
 
 ## 七、浏览量是怎么算的
 
-首页那行「N 次访问」和文章页那行「N 次阅读」用的是免费计数服务
-[abacus.jasoncameron.dev](https://abacus.jasoncameron.dev)（支持跨域、不用注册）。
+列表页和文章页那两个小徽章，用的是 [hits.sh](https://hits.sh) 的免费 SVG 计数图（不用注册）。
+图片每加载一次算一次浏览，加载失败会自动隐藏，不影响排版。
 
-- 同一个浏览器会话里，每个页面只计一次，来回点导航不会刷数字
-- 数字会缓存在本地（localStorage），下次打开先显示上次的值，再静默更新
-- 服务挂了 / 被墙 / 离线打开本地文件，计数会自动隐藏，不影响页面
-- 命名空间是 `politeelm-blog`，站点总数存在 key `site`，每篇文章存在 `post-<slug>`
+- 板块总浏览：`hits.sh/politeelm.github.io/cudm/index.svg`
+- 单篇阅读：`hits.sh/politeelm.github.io/cudm/post-<slug>.svg`
+- 配置在各自 `posts.js` 的 `counterPath` 字段，改板块名时记得一起改
 
-**想清空某个计数**：浏览器打开
-`https://abacus.jasoncameron.dev/get/politeelm-blog/site` 看当前值；
-这个接口没有提供删除，要重置只能换命名空间——改 `app.js` 里 `VIEWS` 的 `NS` 变量即可
-（换了之后所有计数从 0 开始）。
+> 为什么没用 Moe-counter：`count.getloli.com` 被 Cloudflare 的 JS 挑战挡着，
+> 普通 `<img>` 请求只会拿到 403，除非自己在服务器上部署一份。
 
-**不想要这个功能**：把 `app.js` 里 `hydrateViews()` 的调用删掉，或者把 `NS` 改成一个空字符串。
+**不想要这个功能**：把 `app.js` 里 `hydrateCounters()` 的调用删掉即可。
 
 ## 八、几个要知道的取舍
 

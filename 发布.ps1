@@ -32,22 +32,34 @@ if (-not (Test-Path (Join-Path $root ".git"))) {
 
 # ---------- 1. 版本号 +1 ----------
 
-$indexPath = Join-Path $root "index.html"
-$html = [System.IO.File]::ReadAllText($indexPath, [System.Text.Encoding]::UTF8)
+# 三个页面（主页 / cudm / dev）各自带 ?v=，统一涨到同一个号码
+$indexFiles = @()
+$rootIndex = Join-Path $root "index.html"
+if (Test-Path $rootIndex) { $indexFiles += $rootIndex }
+foreach ($sec in @("cudm", "dev")) {
+  $p = Join-Path (Join-Path $root $sec) "index.html"
+  if (Test-Path $p) { $indexFiles += $p }
+}
 
-$found = [regex]::Matches($html, '\?v=(\d+)')
-if ($found.Count -eq 0) {
-  Write-Host "警告：index.html 里没找到 ?v= 版本号，跳过" -ForegroundColor Yellow
-} else {
-  $current = 0
-  foreach ($m in $found) {
+$current = 0
+foreach ($f in $indexFiles) {
+  $html = [System.IO.File]::ReadAllText($f, [System.Text.Encoding]::UTF8)
+  foreach ($m in [regex]::Matches($html, '\?v=(\d+)')) {
     $n = [int]$m.Groups[1].Value
     if ($n -gt $current) { $current = $n }
   }
+}
+
+if ($current -eq 0) {
+  Write-Host "警告：页面里没找到 ?v= 版本号，跳过" -ForegroundColor Yellow
+} else {
   $next = $current + 1
-  $html = [regex]::Replace($html, '\?v=\d+', ('?v=' + $next))
-  [System.IO.File]::WriteAllText($indexPath, $html, (New-Object System.Text.UTF8Encoding($false)))
-  Write-Host "缓存版本号：v$current → v$next" -ForegroundColor Cyan
+  foreach ($f in $indexFiles) {
+    $html = [System.IO.File]::ReadAllText($f, [System.Text.Encoding]::UTF8)
+    $html = [regex]::Replace($html, '\?v=\d+', ('?v=' + $next))
+    [System.IO.File]::WriteAllText($f, $html, (New-Object System.Text.UTF8Encoding($false)))
+  }
+  Write-Host "缓存版本号：v$current → v$next（$($indexFiles.Count) 个页面）" -ForegroundColor Cyan
 }
 
 # ---------- 2. 提交 ----------
@@ -101,5 +113,5 @@ if (-not $ok) {
 }
 
 Write-Host ""
-Write-Host "大约 1 分钟后生效：https://politeelm.github.io/Blog/" -ForegroundColor Cyan
+Write-Host "大约 1 分钟后生效：https://politeelm.github.io/" -ForegroundColor Cyan
 Write-Host "如果看到的还是旧内容，按 Ctrl + F5 强刷一次。" -ForegroundColor Cyan

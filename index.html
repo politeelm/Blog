@@ -3,19 +3,18 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>L1MA0 · 个人网页</title>
-  <meta name="description" content="此网站收录本人所遇奇异搞笑事件。">
+  <title>L1MA0</title>
+  <meta name="description" content="L1MA0 的个人主页：cudm 奇人异事与 dev 项目简介。">
   <meta name="author" content="L1MA0">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="L1MA0的个人网页">
-  <meta property="og:description" content="此网站收录本人所遇奇异搞笑事件。">
-  <meta property="og:image" content="https://politeelm.github.io/Blog/assets/images/favicon-512.png">
+  <meta property="og:title" content="L1MA0">
+  <meta property="og:description" content="L1MA0 的个人主页：cudm 奇人异事与 dev 项目简介。">
   <link rel="icon" href="assets/images/favicon-32.png" sizes="32x32" type="image/png">
   <link rel="icon" href="assets/images/favicon-16.png" sizes="16x16" type="image/png">
   <link rel="shortcut icon" href="assets/images/favicon.ico">
   <link rel="apple-touch-icon" href="assets/images/apple-touch-icon.png">
-  <link rel="stylesheet" href="assets/css/style.css?v=18">
-  <link rel="alternate" type="application/rss+xml" title="L1MA0" href="feed.xml">
+  <link rel="stylesheet" href="assets/css/style.css?v=19">
+  <link rel="stylesheet" href="assets/css/home.css?v=19">
   <script>
     (function () {
       try {
@@ -30,38 +29,54 @@
 </head>
 <body>
 
-  <div class="progress" id="progress"></div>
-
   <header class="site-header">
     <div class="shell header-inner">
-      <a class="brand" href="#/" id="brand">L1MA0</a>
+      <a class="brand" href="./">L1MA0</a>
       <nav class="site-nav" aria-label="主导航">
         <ul>
-          <li><a href="#/" data-nav="list">文章</a></li>
-          <li><a href="#/tags" data-nav="tags">标签</a></li>
-          <li><a href="#/about" data-nav="about">关于</a></li>
+          <li><a href="cudm/">cudm</a></li>
+          <li><a href="dev/">dev</a></li>
         </ul>
       </nav>
       <button class="theme-toggle" type="button" aria-label="切换主题">☾</button>
     </div>
   </header>
 
-  <main class="shell" id="app">
-    <!-- 内容由 app.js 渲染 -->
+  <main class="shell">
+    <section class="home-hero">
+      <p class="home-eyebrow">Personal Site</p>
+      <h1>L1MA0</h1>
+      <p class="home-intro">
+        这里分两个地方：<strong>cudm</strong> 放我遇到的奇人异事，<strong>dev</strong> 放我自己做的东西。
+        两边都能翻页、按标签筛、搜关键词。
+      </p>
+      <p class="home-note">如果我冒犯到了你，那我说的就是你，憋着。</p>
+    </section>
+
+    <section class="boards" aria-label="板块">
+      <a class="board" href="cudm/">
+        <span class="board-tag">cudm</span>
+        <h2>cudm奇人异事</h2>
+        <p>收录本人所遇的奇人异事。现实不用讲逻辑，讲逻辑的写不出这种东西。</p>
+        <span class="board-more">进去看看 →</span>
+      </a>
+
+      <a class="board" href="dev/">
+        <span class="board-tag">dev</span>
+        <h2>dev · 项目简介</h2>
+        <p>写过的程序、改过的工具、踩过的坑。每做一个东西，就在这儿留一篇记录。</p>
+        <span class="board-more">进去看看 →</span>
+      </a>
+    </section>
   </main>
 
   <footer class="site-footer">
     <div class="shell footer-inner">
       <span>© <span data-year>2026</span> L1MA0</span>
-      <span><a href="feed.xml">RSS</a> · <a href="#/">回到首页</a> · 纯 HTML 手写</span>
+      <span><a href="cudm/feed.xml">cudm RSS</a> · <a href="dev/feed.xml">dev RSS</a></span>
     </div>
   </footer>
 
-  <button class="to-top" id="toTop" type="button" aria-label="回到顶部">↑</button>
-
-  <!-- ?v= 是缓存版本号：改了 js/css 之后把数字 +1，浏览器就会立刻拉新的 -->
-  <script src="assets/js/posts.js?v=18"></script>
-  <script src="assets/js/app.js?v=18"></script>
-  <script src="assets/js/main.js?v=18"></script>
+  <script src="assets/js/main.js"></script>
 </body>
 </html>

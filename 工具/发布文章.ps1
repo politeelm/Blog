@@ -21,6 +21,7 @@
 
 param(
   [string]$文件 = "",
+  [string]$板块 = "",
   [switch]$仅本地,
   [switch]$不暂停
 )
@@ -37,7 +38,26 @@ try {
 $scriptDir = $PSScriptRoot
 if ([string]::IsNullOrWhiteSpace($scriptDir)) { $scriptDir = (Get-Location).Path }
 $root = Split-Path $scriptDir -Parent     # 仓库根目录（工具 的上一级）
-$siteUrl = "https://politeelm.github.io/Blog"
+
+# ---------------- 板块：cudm（奇人异事）/ dev（项目简介） ----------------
+if ([string]::IsNullOrWhiteSpace($板块)) {
+  $answer = ""
+  try {
+    Add-Type -AssemblyName Microsoft.VisualBasic | Out-Null
+    $answer = [Microsoft.VisualBasic.Interaction]::InputBox("发布到哪个板块？`n`n输入 cudm 或 dev，直接确定 = cudm", "选择板块", "cudm")
+  } catch { $answer = "cudm" }
+  if ([string]::IsNullOrWhiteSpace($answer)) { $answer = "cudm" }
+  $板块 = $answer
+}
+
+$板块 = $板块.Trim().Trim("/").ToLower()
+if ($板块 -ne "cudm" -and $板块 -ne "dev") {
+  Write-Host "板块只能是 cudm 或 dev，收到的是：$板块" -ForegroundColor Red
+  Pause-Exit 1
+}
+
+$sectionDir = Join-Path $root $板块
+$siteUrl = "https://politeelm.github.io/$板块"
 
 $nl = "`r`n"
 
@@ -176,7 +196,7 @@ function Resolve-Images($lines, [string]$sourceDir) {
     }
 
     Copy-Item -LiteralPath $candidate -Destination $target -Force
-    $script:imageMap[$src] = "assets/images/$name"
+    $script:imageMap[$src] = "../assets/images/$name"
 
     $size = (Get-Item -LiteralPath $target).Length
     Write-Host ("  图片已复制：{0} → assets/images/{1}（{2:N0} KB）" -f $src, $name, ($size / 1KB)) -ForegroundColor DarkGray
@@ -300,9 +320,9 @@ if ($baseName -match '^[A-Za-z0-9\-_]+$') {
   Write-Host "提示：文件名不是纯英文，文章地址用时间戳 $slug" -ForegroundColor Yellow
 }
 
-$dataPath = Join-Path $root "assets\js\posts.js"
-$indexPath = Join-Path $root "index.html"
-$feedPath = Join-Path $root "feed.xml"
+$dataPath = Join-Path $sectionDir "posts.js"
+$indexPath = Join-Path $sectionDir "index.html"
+$feedPath = Join-Path $sectionDir "feed.xml"
 foreach ($p in @($dataPath, $indexPath, $feedPath)) {
   if (-not (Test-Path -LiteralPath $p)) {
     Write-Host "仓库文件缺失：$p" -ForegroundColor Red

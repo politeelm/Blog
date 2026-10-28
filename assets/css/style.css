@@ -358,12 +358,28 @@ html[data-theme="dark"] .chip.is-active {
 
 
 .view-count {
-  white-space: nowrap;
-  font-variant-numeric: tabular-nums;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
 }
 
-.view-count[hidden] {
-  display: none;
+.view-count img {
+  height: 1.05rem;
+  width: auto;
+  border-radius: 3px;
+  opacity: 0.9;
+}
+
+/* 板块页返回主页的品牌链接 */
+.brand-back {
+  font-size: 1rem;
+  letter-spacing: 0;
+}
+
+@media (max-width: 480px) {
+  .brand-back {
+    font-size: 0.92rem;
+  }
 }
 
 .cards {
